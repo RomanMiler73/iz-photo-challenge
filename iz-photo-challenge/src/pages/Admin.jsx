@@ -25,6 +25,9 @@ export default function Admin() {
   const [winnersCount, setWinnersCount] = useState(3)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [resetting, setResetting] = useState(false)
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
+  const [resetDone, setResetDone] = useState(false)
 
   const [stats, setStats] = useState({ photos: 0, voters: 0 })
   const [loading, setLoading] = useState(true)
@@ -90,8 +93,19 @@ export default function Admin() {
     }
   }
 
+  const handleReset = async () => {
+    setResetting(true)
+    await supabase.from('votes').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+    await supabase.from('photos').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+    setResetting(false)
+    setShowResetConfirm(false)
+    setResetDone(true)
+    setTimeout(() => setResetDone(false), 4000)
+    loadData()
+  }
+
   const copyVotingLink = () => {
-    const url = `${window.location.origin}${window.location.pathname}#vote`
+    const url = `${window.location.origin}/#vote`
     navigator.clipboard.writeText(url)
   }
 
@@ -184,7 +198,7 @@ export default function Admin() {
                 wordBreak: 'break-all',
                 border: '1px solid var(--border)',
               }}>
-                {window.location.origin}{window.location.pathname}#vote
+                {window.location.origin}/#vote
               </code>
               <button className="btn btn-outline" onClick={copyVotingLink}>
                 Copy Link
@@ -244,6 +258,26 @@ export default function Admin() {
 
           <hr className="divider" />
 
+          {/* Danger zone */}
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', marginBottom: 8, color: 'var(--error)' }}>
+            Danger Zone
+          </h2>
+          <p style={{ color: 'var(--muted)', fontSize: '0.9rem', marginBottom: 16 }}>
+            Permanently delete all photos and votes. This cannot be undone.
+          </p>
+
+          {resetDone && <div className="alert alert-success">All photos and votes have been deleted.</div>}
+
+          <button
+            className="btn btn-outline"
+            style={{ borderColor: 'var(--error)', color: 'var(--error)' }}
+            onClick={() => setShowResetConfirm(true)}
+          >
+            Reset Contest — Delete All Data
+          </button>
+
+          <hr className="divider" />
+
           <button
             className="btn btn-outline"
             onClick={() => { localStorage.removeItem('iz_admin'); window.location.reload() }}
@@ -251,6 +285,31 @@ export default function Admin() {
             Sign Out
           </button>
         </>
+      )}
+
+      {/* Reset confirmation dialog */}
+      {showResetConfirm && (
+        <div className="dialog-overlay">
+          <div className="dialog">
+            <h3 style={{ color: 'var(--error)' }}>⚠️ Delete All Data?</h3>
+            <p>
+              This will permanently delete <strong>all {stats.photos} photos</strong> and <strong>all votes</strong> from the database. This cannot be undone.
+            </p>
+            <div className="dialog-actions">
+              <button className="btn btn-outline" onClick={() => setShowResetConfirm(false)}>
+                Cancel
+              </button>
+              <button
+                className="btn"
+                style={{ background: 'var(--error)', color: 'white' }}
+                onClick={handleReset}
+                disabled={resetting}
+              >
+                {resetting ? <><span className="spinner" /> Deleting…</> : 'Yes, Delete Everything'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )
