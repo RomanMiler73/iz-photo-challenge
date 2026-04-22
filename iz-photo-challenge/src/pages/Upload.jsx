@@ -56,7 +56,7 @@ export default function Upload({ onNavigate }) {
   return (
     <div className="page page-narrow">
       <h1 className="page-title">Share your<br /><em>photo</em></h1>
-      <p className="page-subtitle">Submit your photo to the IZ Photo Challenge</p>
+      <p className="page-subtitle">Submit your photo to the IŽ Photo Challenge</p>
 
       {error && <div className="alert alert-error">{error}</div>}
 

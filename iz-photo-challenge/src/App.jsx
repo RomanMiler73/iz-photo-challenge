@@ -35,7 +35,7 @@ export default function App() {
       {!isSlideshow && (
         <nav className="nav">
           <span className="nav-brand">
-            IZ <span>Photo</span> Challenge
+            I<span>Ž</span> Photo Challenge
           </span>
           <button className={`nav-link ${page === 'upload' ? 'active' : ''}`} onClick={() => navigate('upload')}>Upload</button>
           <button className={`nav-link ${page === 'gallery' ? 'active' : ''}`} onClick={() => navigate('gallery')}>Gallery</button>
@@ -52,6 +52,20 @@ export default function App() {
       {page === 'vote' && <Vote />}
       {page === 'results' && <Results />}
       {page === 'admin' && <Admin />}
+
+      {!isSlideshow && (
+        <footer style={{
+          textAlign: 'center',
+          padding: '24px 16px',
+          color: 'var(--muted)',
+          fontSize: '0.82rem',
+          borderTop: '1px solid var(--border)',
+          fontFamily: 'var(--font-body)',
+          letterSpacing: '0.02em',
+        }}>
+          By RM from <em>Puno dičine</em> for <strong>Iž u srcu</strong>
+        </footer>
+      )}
     </>
   )
 }

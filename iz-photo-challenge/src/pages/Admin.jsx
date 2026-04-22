@@ -138,7 +138,7 @@ export default function Admin() {
   return (
     <div className="page" style={{ maxWidth: 720 }}>
       <h1 className="page-title">Admin Panel</h1>
-      <p className="page-subtitle">IZ Photo Challenge — Control Centre</p>
+      <p className="page-subtitle">IŽ Photo Challenge — Control Centre</p>
 
       {loading ? (
         <div style={{ textAlign: 'center', padding: 60 }}>
