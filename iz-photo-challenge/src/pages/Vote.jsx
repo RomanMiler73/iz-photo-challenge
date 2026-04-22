@@ -59,7 +59,7 @@ const loginWithFacebook = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'facebook',
       options: {
-        redirectTo: `${window.location.origin}${window.location.pathname}#vote`,
+        redirectTo: `${window.location.origin}/#vote`,
         scopes: 'public_profile',
       },
     })
