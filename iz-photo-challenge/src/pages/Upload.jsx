@@ -1,0 +1,140 @@
+import { useState, useRef } from 'react'
+import { supabase } from '../lib/supabase'
+import { uploadToCloudinary } from '../lib/cloudinary'
+import { COUNTRIES } from '../lib/countries'
+
+export default function Upload({ onNavigate }) {
+  const [name, setName] = useState('')
+  const [country, setCountry] = useState('')
+  const [comment, setComment] = useState('')
+  const [photo, setPhoto] = useState(null)
+  const [preview, setPreview] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [dragover, setDragover] = useState(false)
+  const fileRef = useRef()
+
+  const handleFile = (file) => {
+    if (!file || !file.type.startsWith('image/')) return
+    setPhoto(file)
+    const url = URL.createObjectURL(file)
+    setPreview(url)
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    setDragover(false)
+    handleFile(e.dataTransfer.files[0])
+  }
+
+  const handleSubmit = async () => {
+    if (!name.trim() || !country || !photo) {
+      setError('Please fill in your name, country, and select a photo.')
+      return
+    }
+    setError(null)
+    setLoading(true)
+    try {
+      const { imageUrl, thumbnailUrl } = await uploadToCloudinary(photo)
+      const { error: dbError } = await supabase.from('photos').insert({
+        name: name.trim(),
+        country,
+        comment: comment.trim() || null,
+        image_url: imageUrl,
+        thumbnail_url: thumbnailUrl,
+      })
+      if (dbError) throw dbError
+      onNavigate('gallery')
+    } catch (err) {
+      console.error(err)
+      setError('Upload failed. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="page page-narrow">
+      <h1 className="page-title">Share your<br /><em>photo</em></h1>
+      <p className="page-subtitle">Submit your photo to the IZ Photo Challenge</p>
+
+      {error && <div className="alert alert-error">{error}</div>}
+
+      <div className="form-group">
+        <label className="form-label">Your Photo *</label>
+        <div
+          className={`upload-zone ${dragover ? 'dragover' : ''}`}
+          onDragOver={(e) => { e.preventDefault(); setDragover(true) }}
+          onDragLeave={() => setDragover(false)}
+          onDrop={handleDrop}
+          onClick={() => fileRef.current?.click()}
+        >
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={(e) => handleFile(e.target.files[0])}
+          />
+          {preview ? (
+            <>
+              <img src={preview} alt="Preview" className="upload-preview" />
+              <p className="upload-text">Tap to change photo</p>
+            </>
+          ) : (
+            <>
+              <span className="upload-icon">📷</span>
+              <p className="upload-text">Tap to select a photo from your device</p>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">Your Name *</label>
+        <input
+          className="form-input"
+          type="text"
+          placeholder="Enter your name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          maxLength={80}
+        />
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">Country *</label>
+        <select
+          className="form-select"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+        >
+          <option value="">Select your country…</option>
+          {COUNTRIES.map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">Comment <span style={{fontWeight:300,textTransform:'none',letterSpacing:0}}>(optional)</span></label>
+        <textarea
+          className="form-textarea"
+          placeholder="Say something about your photo…"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          maxLength={300}
+        />
+        <div className="char-count">{comment.length}/300</div>
+      </div>
+
+      <button
+        className="btn btn-primary btn-full"
+        onClick={handleSubmit}
+        disabled={loading}
+      >
+        {loading ? <><span className="spinner" /> Uploading…</> : 'Submit Photo'}
+      </button>
+    </div>
+  )
+}
