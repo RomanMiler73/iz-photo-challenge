@@ -35,7 +35,7 @@ export default function App() {
       {!isSlideshow && (
         <nav className="nav">
           <span className="nav-brand">
-            I<span>Ž</span> Photo Challenge
+            IŽ <span>Photo</span> Challenge
           </span>
           <button className={`nav-link ${page === 'upload' ? 'active' : ''}`} onClick={() => navigate('upload')}>Upload</button>
           <button className={`nav-link ${page === 'gallery' ? 'active' : ''}`} onClick={() => navigate('gallery')}>Gallery</button>
