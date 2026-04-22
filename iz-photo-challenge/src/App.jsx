@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import '../styles/global.css'
+import './styles/global.css'
 import Upload from './pages/Upload'
 import Gallery from './pages/Gallery'
 import Slideshow from './pages/Slideshow'
