@@ -61,7 +61,7 @@ export default function Terms() {
           fontSize: '0.85rem',
           color: 'var(--muted)',
         }}>
-          Designed by <strong>// RUTNJAK LABS //</strong> for <strong>Iž u srcu</strong>
+          Designed by <strong>// RUTNJAK STUDIO //</strong> for <strong>Iž u srcu</strong>
         </div>
 
       </div>

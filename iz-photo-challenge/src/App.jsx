@@ -93,7 +93,7 @@ export default function App() {
             style={{ color: 'var(--muted)', textDecoration: 'none', fontWeight: 600, letterSpacing: '0.04em' }}
             onClick={(e) => { e.preventDefault(); window.location.hash = 'about' }}
           >
-            // RUTNJAK LABS //
+            // RUTNJAK STUDIO //
           </a>
           {' '}for <strong>Iž u srcu</strong>
         </footer>
