@@ -9,6 +9,7 @@ import Admin from './pages/Admin'
 import About from './pages/About'
 import Home from './pages/Home'
 import Terms from './pages/Terms'
+import { supabase } from './lib/supabase'
 
 const PAGES = ['home', 'upload', 'gallery', 'slideshow', 'vote', 'results', 'admin', 'about', 'terms']
 
@@ -19,11 +20,23 @@ function getPage() {
 
 export default function App() {
   const [page, setPage] = useState(getPage)
+  const [votingConfigured, setVotingConfigured] = useState(false)
 
   useEffect(() => {
     const onHash = () => setPage(getPage())
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
+  useEffect(() => {
+    supabase
+      .from('settings')
+      .select('vote_start, vote_end')
+      .eq('id', 1)
+      .single()
+      .then(({ data }) => {
+        setVotingConfigured(!!(data?.vote_start && data?.vote_end))
+      })
   }, [])
 
   const navigate = (p) => {
@@ -37,12 +50,18 @@ export default function App() {
     <>
       {!isSlideshow && (
         <nav className="nav">
-          <span className="nav-brand" onClick={() => navigate('home')} style={{ cursor: 'pointer' }}>
+          <span
+            className="nav-brand"
+            onClick={() => navigate('home')}
+            style={{ cursor: 'pointer' }}
+          >
             IŽ <span>Photo</span> Challenge
           </span>
           <button className={`nav-link ${page === 'upload' ? 'active' : ''}`} onClick={() => navigate('upload')}>Upload</button>
           <button className={`nav-link ${page === 'gallery' ? 'active' : ''}`} onClick={() => navigate('gallery')}>Gallery</button>
-          <button className={`nav-link ${page === 'vote' ? 'active' : ''}`} onClick={() => navigate('vote')}>Vote</button>
+          {votingConfigured && (
+            <button className={`nav-link ${page === 'vote' ? 'active' : ''}`} onClick={() => navigate('vote')}>Vote</button>
+          )}
           <button className={`nav-link ${page === 'about' ? 'active' : ''}`} onClick={() => navigate('about')}>About</button>
           <button className={`nav-link ${page === 'admin' ? 'active' : ''}`} onClick={() => navigate('admin')} style={{ color: 'rgba(247,244,238,0.3)' }}>Admin</button>
         </nav>
