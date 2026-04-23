@@ -9,6 +9,7 @@ export default function Upload({ onNavigate }) {
   const [comment, setComment] = useState('')
   const [photo, setPhoto] = useState(null)
   const [preview, setPreview] = useState(null)
+  const [agreed, setAgreed] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [dragover, setDragover] = useState(false)
@@ -30,6 +31,10 @@ export default function Upload({ onNavigate }) {
   const handleSubmit = async () => {
     if (!name.trim() || !country || !photo) {
       setError('Please fill in your name, country, and select a photo.')
+      return
+    }
+    if (!agreed) {
+      setError('Please agree to the contest terms before submitting.')
       return
     }
     setError(null)
@@ -126,6 +131,41 @@ export default function Upload({ onNavigate }) {
           maxLength={300}
         />
         <div className="char-count">{comment.length}/300</div>
+      </div>
+
+      {/* Terms checkbox */}
+      <div className="form-group">
+        <label style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          gap: 12,
+          cursor: 'pointer',
+          padding: '14px 16px',
+          background: agreed ? 'rgba(184,135,42,0.06)' : 'var(--white)',
+          border: `1.5px solid ${agreed ? 'var(--gold)' : 'var(--border)'}`,
+          borderRadius: 'var(--radius)',
+          transition: 'all 0.15s',
+        }}>
+          <input
+            type="checkbox"
+            checked={agreed}
+            onChange={(e) => setAgreed(e.target.checked)}
+            style={{ marginTop: 3, accentColor: 'var(--gold)', width: 16, height: 16, flexShrink: 0 }}
+          />
+          <span style={{ fontSize: '0.9rem', lineHeight: 1.5, color: 'var(--ink)' }}>
+            I agree to the{' '}
+            <a
+              href="/#terms"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'var(--gold)', textDecoration: 'underline' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              contest terms
+            </a>
+            . I understand that my photo will be published on the website, shared in the Facebook group, and may be displayed publicly on the Island of Iž.
+          </span>
+        </label>
       </div>
 
       <button
