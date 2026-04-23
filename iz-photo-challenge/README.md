@@ -245,7 +245,21 @@ Go to supabase.com → Table Editor → select `photos` or `votes` table.
 
 ## To Do
 
-*Details to be added.*
+### 1. Fix Voting
+Facebook Login via Supabase OAuth is not working correctly. Symptoms: blank page after clicking Login with Facebook, or email scope error shown to the app developer account. Needs investigation into the Supabase Facebook provider configuration, OAuth redirect URIs, and scope settings. The email scope error is developer-only and does not affect regular users, but the blank page redirect issue prevents voting from working end-to-end.
+
+### 2. Photo Moderation — Brainstorm
+Currently photos are auto-published immediately on upload with no review step. For a future version, consider an admin approval flow to prevent offensive or inappropriate submissions appearing in the public gallery. Points to consider:
+- Admin receives a notification when a new photo is submitted
+- Photo is held in a pending state — visible in admin but not in public gallery or voting
+- Admin can approve or reject with one click
+- Rejected photos are deleted or flagged with a reason
+- This requires an additional status field on the photos table (e.g. pending / approved / rejected)
+- Consider whether the uploader should be notified on rejection (would require collecting an email)
+- Implementation complexity: medium — DB change + admin UI additions + gallery filter update
+
+### 3. Complete About Page
+The About page exists as a placeholder at /#about. Content to be written and provided by the organiser. The page is already in the nav and wired up — just needs text.
 
 ---
 

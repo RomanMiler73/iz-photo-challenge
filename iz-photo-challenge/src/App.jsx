@@ -87,7 +87,15 @@ export default function App() {
           fontFamily: 'var(--font-body)',
           letterSpacing: '0.02em',
         }}>
-          By RM from <em>Puno dičine</em> for <strong>Iž u srcu</strong>
+          Designed by{' '}
+          <a
+            href="/#about"
+            style={{ color: 'var(--muted)', textDecoration: 'none', fontWeight: 600, letterSpacing: '0.04em' }}
+            onClick={(e) => { e.preventDefault(); window.location.hash = 'about' }}
+          >
+            // RUTNJAK LABS //
+          </a>
+          {' '}for <strong>Iž u srcu</strong>
         </footer>
       )}
     </>
