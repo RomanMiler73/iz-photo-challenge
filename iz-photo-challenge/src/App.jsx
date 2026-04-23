@@ -9,9 +9,10 @@ import Admin from './pages/Admin'
 import About from './pages/About'
 import Home from './pages/Home'
 import Terms from './pages/Terms'
+import Confirmation from './pages/Confirmation'
 import { supabase } from './lib/supabase'
 
-const PAGES = ['home', 'upload', 'gallery', 'slideshow', 'vote', 'results', 'admin', 'about', 'terms']
+const PAGES = ['home', 'upload', 'gallery', 'slideshow', 'vote', 'results', 'admin', 'about', 'terms', 'confirmation']
 
 function getPage() {
   const h = window.location.hash.replace('#', '')
@@ -21,6 +22,7 @@ function getPage() {
 export default function App() {
   const [page, setPage] = useState(getPage)
   const [votingConfigured, setVotingConfigured] = useState(false)
+  const [submission, setSubmission] = useState(null)
 
   useEffect(() => {
     const onHash = () => setPage(getPage())
@@ -68,7 +70,7 @@ export default function App() {
       )}
 
       {page === 'home' && <Home onNavigate={navigate} />}
-      {page === 'upload' && <Upload onNavigate={navigate} />}
+      {page === 'upload' && <Upload onNavigate={navigate} onConfirm={(data) => { setSubmission(data); navigate('confirmation') }} />}
       {page === 'gallery' && <Gallery onNavigate={navigate} />}
       {page === 'vote' && <Vote />}
       {page === 'admin' && <Admin onNavigate={navigate} />}
@@ -76,6 +78,7 @@ export default function App() {
       {page === 'about' && <About />}
       {page === 'results' && <Results />}
       {page === 'terms' && <Terms />}
+      {page === 'confirmation' && <Confirmation submission={submission} onNavigate={navigate} />}
 
       {!isSlideshow && (
         <footer style={{

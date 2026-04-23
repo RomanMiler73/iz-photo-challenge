@@ -3,7 +3,16 @@ import { supabase } from '../lib/supabase'
 import { uploadToCloudinary } from '../lib/cloudinary'
 import { COUNTRIES } from '../lib/countries'
 
-export default function Upload({ onNavigate }) {
+function generateCode() {
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'
+  let code = 'IZ-'
+  for (let i = 0; i < 6; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+  return code
+}
+
+export default function Upload({ onNavigate, onConfirm }) {
   const [name, setName] = useState('')
   const [country, setCountry] = useState('')
   const [comment, setComment] = useState('')
@@ -41,15 +50,24 @@ export default function Upload({ onNavigate }) {
     setLoading(true)
     try {
       const { imageUrl, thumbnailUrl } = await uploadToCloudinary(photo)
+      const code = generateCode()
+
       const { error: dbError } = await supabase.from('photos').insert({
         name: name.trim(),
         country,
         comment: comment.trim() || null,
         image_url: imageUrl,
         thumbnail_url: thumbnailUrl,
+        confirmation_code: code,
       })
       if (dbError) throw dbError
-      onNavigate('gallery')
+
+      onConfirm({
+        name: name.trim(),
+        country,
+        thumbnailUrl,
+        code,
+      })
     } catch (err) {
       console.error(err)
       setError('Upload failed. Please try again.')
@@ -133,7 +151,6 @@ export default function Upload({ onNavigate }) {
         <div className="char-count">{comment.length}/300</div>
       </div>
 
-      {/* Terms checkbox */}
       <div className="form-group">
         <label style={{
           display: 'flex',
