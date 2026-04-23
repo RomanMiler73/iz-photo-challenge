@@ -55,12 +55,11 @@ export default function Vote() {
     setLoading(false)
   }
 
-const loginWithFacebook = async () => {
+  const loginWithFacebook = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'facebook',
       options: {
-        redirectTo: `${window.location.origin}/#vote`,
-        scopes: 'public_profile',
+        redirectTo: `${window.location.origin}${window.location.pathname}#vote`,
       },
     })
   }

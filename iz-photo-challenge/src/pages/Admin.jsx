@@ -278,6 +278,21 @@ export default function Admin() {
 
           <hr className="divider" />
 
+          {/* Admin navigation */}
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', marginBottom: 16 }}>
+            Admin Tools
+          </h2>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 32 }}>
+            <button className="btn btn-outline" onClick={() => window.location.hash = 'slideshow'}>
+              ▶ Launch Slideshow
+            </button>
+            <button className="btn btn-outline" onClick={() => window.location.hash = 'results'}>
+              🏆 View Results
+            </button>
+          </div>
+
+          <hr className="divider" />
+
           <button
             className="btn btn-outline"
             onClick={() => { localStorage.removeItem('iz_admin'); window.location.reload() }}

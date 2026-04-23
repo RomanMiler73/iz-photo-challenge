@@ -68,32 +68,8 @@ export default function Results() {
   }
 
   if (!authed) {
-    return (
-      <div className="page">
-        <div className="password-gate">
-          <div className="password-gate-inner">
-            <div style={{ fontSize: '2.5rem', marginBottom: 16 }}>🏆</div>
-            <h2>Results</h2>
-            <p>Enter the admin password to view results.</p>
-            <div className="form-group">
-              <input
-                className="form-input"
-                type="password"
-                placeholder="Admin password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleLogin()}
-                style={pwError ? { borderColor: 'var(--error)' } : {}}
-              />
-              {pwError && <div className="alert alert-error" style={{ marginTop: 8 }}>Incorrect password</div>}
-            </div>
-            <button className="btn btn-primary btn-full" onClick={handleLogin}>
-              View Results
-            </button>
-          </div>
-        </div>
-      </div>
-    )
+    window.location.hash = 'admin'
+    return null
   }
 
   const voteEnd = settings?.vote_end ? new Date(settings.vote_end) : null

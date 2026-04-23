@@ -41,9 +41,6 @@ export default function Gallery({ onNavigate }) {
           <p className="page-subtitle">{total} photo{total !== 1 ? 's' : ''} submitted</p>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
-          <button className="btn btn-outline" onClick={() => onNavigate('slideshow')}>
-            ▶ Slideshow
-          </button>
           <button className="btn btn-gold" onClick={() => onNavigate('vote')}>
             Vote
           </button>

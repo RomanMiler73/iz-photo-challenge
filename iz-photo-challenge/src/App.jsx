@@ -6,8 +6,9 @@ import Slideshow from './pages/Slideshow'
 import Vote from './pages/Vote'
 import Results from './pages/Results'
 import Admin from './pages/Admin'
+import About from './pages/About'
 
-const PAGES = ['upload', 'gallery', 'slideshow', 'vote', 'results', 'admin']
+const PAGES = ['upload', 'gallery', 'slideshow', 'vote', 'results', 'admin', 'about']
 
 function getPage() {
   const h = window.location.hash.replace('#', '')
@@ -39,19 +40,19 @@ export default function App() {
           </span>
           <button className={`nav-link ${page === 'upload' ? 'active' : ''}`} onClick={() => navigate('upload')}>Upload</button>
           <button className={`nav-link ${page === 'gallery' ? 'active' : ''}`} onClick={() => navigate('gallery')}>Gallery</button>
-          <button className={`nav-link ${page === 'slideshow' ? 'active' : ''}`} onClick={() => navigate('slideshow')}>Slideshow</button>
           <button className={`nav-link ${page === 'vote' ? 'active' : ''}`} onClick={() => navigate('vote')}>Vote</button>
-          <button className={`nav-link ${page === 'results' ? 'active' : ''}`} onClick={() => navigate('results')}>Results</button>
+          <button className={`nav-link ${page === 'about' ? 'active' : ''}`} onClick={() => navigate('about')}>About</button>
           <button className={`nav-link ${page === 'admin' ? 'active' : ''}`} onClick={() => navigate('admin')} style={{ color: 'rgba(247,244,238,0.3)' }}>Admin</button>
         </nav>
       )}
 
       {page === 'upload' && <Upload onNavigate={navigate} />}
       {page === 'gallery' && <Gallery onNavigate={navigate} />}
-      {page === 'slideshow' && <Slideshow onNavigate={navigate} />}
       {page === 'vote' && <Vote />}
+      {page === 'admin' && <Admin onNavigate={navigate} />}
+      {page === 'slideshow' && <Slideshow onNavigate={navigate} />}
+      {page === 'about' && <About />}
       {page === 'results' && <Results />}
-      {page === 'admin' && <Admin />}
 
       {!isSlideshow && (
         <footer style={{
