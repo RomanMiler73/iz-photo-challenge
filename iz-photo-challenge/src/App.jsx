@@ -7,12 +7,14 @@ import Vote from './pages/Vote'
 import Results from './pages/Results'
 import Admin from './pages/Admin'
 import About from './pages/About'
+import Home from './pages/Home'
+import Terms from './pages/Terms'
 
-const PAGES = ['upload', 'gallery', 'slideshow', 'vote', 'results', 'admin', 'about']
+const PAGES = ['home', 'upload', 'gallery', 'slideshow', 'vote', 'results', 'admin', 'about', 'terms']
 
 function getPage() {
   const h = window.location.hash.replace('#', '')
-  return PAGES.includes(h) ? h : 'upload'
+  return PAGES.includes(h) ? h : 'home'
 }
 
 export default function App() {
@@ -35,7 +37,7 @@ export default function App() {
     <>
       {!isSlideshow && (
         <nav className="nav">
-          <span className="nav-brand">
+          <span className="nav-brand" onClick={() => navigate('home')} style={{ cursor: 'pointer' }}>
             IŽ <span>Photo</span> Challenge
           </span>
           <button className={`nav-link ${page === 'upload' ? 'active' : ''}`} onClick={() => navigate('upload')}>Upload</button>
@@ -46,6 +48,7 @@ export default function App() {
         </nav>
       )}
 
+      {page === 'home' && <Home onNavigate={navigate} />}
       {page === 'upload' && <Upload onNavigate={navigate} />}
       {page === 'gallery' && <Gallery onNavigate={navigate} />}
       {page === 'vote' && <Vote />}
@@ -53,6 +56,7 @@ export default function App() {
       {page === 'slideshow' && <Slideshow onNavigate={navigate} />}
       {page === 'about' && <About />}
       {page === 'results' && <Results />}
+      {page === 'terms' && <Terms />}
 
       {!isSlideshow && (
         <footer style={{
